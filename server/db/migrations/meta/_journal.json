@@ -8,6 +8,48 @@
       "when": 1725339224084,
       "tag": "0000_nebulous_firebrand",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1725354739418,
+      "tag": "0001_thick_doctor_spectrum",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725354982333,
+      "tag": "0002_little_smasher",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1725436687737,
+      "tag": "0003_far_sunfire",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1725440846004,
+      "tag": "0004_charming_blazing_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1725442673094,
+      "tag": "0005_fresh_magdalene",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725460834470,
+      "tag": "0006_tough_killer_shrike",
+      "breakpoints": true
     }
   ]
 }
