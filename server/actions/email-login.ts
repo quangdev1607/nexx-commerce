@@ -6,15 +6,19 @@ import { eq } from "drizzle-orm";
 import { AuthError } from "next-auth";
 import { createSafeActionClient } from "next-safe-action";
 import { db } from "../db";
-import { users } from "../db/schema";
-import { sendVerificationEmail } from "./email";
-import { generateEmailVerificationToken } from "./tokens";
+import { twoFactorTokens, users } from "../db/schema";
+import { sendTwoFactorTokenByEmail, sendVerificationEmail } from "./email";
+import {
+  generateEmailVerificationToken,
+  generateTwoFactorToken,
+  getTwoFactorTokenByEmail,
+} from "./tokens";
 
 const actionClient = createSafeActionClient();
 
 export const emailLogin = actionClient
   .schema(LoginSchema)
-  .action(async ({ parsedInput: { email, password } }) => {
+  .action(async ({ parsedInput: { email, password, code } }) => {
     try {
       const existedUser = await db.query.users.findFirst({
         where: eq(users.email, email),
@@ -31,6 +35,37 @@ export const emailLogin = actionClient
           verificationToken[0].token,
         );
         return { success: "Confirmation email sent" };
+      }
+
+      if (existedUser.twoFactorEnabled && existedUser.email) {
+        if (code) {
+          const twoFactorToken = await getTwoFactorTokenByEmail(
+            existedUser.email,
+          );
+          if (!twoFactorToken) {
+            return { error: "Invalid token" };
+          }
+          if (twoFactorToken.token !== code) {
+            return { error: "Invalid token" };
+          }
+
+          const hasExpired = new Date(twoFactorToken.expires) < new Date();
+          if (hasExpired) {
+            return { error: "Token has expired" };
+          }
+
+          await db
+            .delete(twoFactorTokens)
+            .where(eq(twoFactorTokens.id, twoFactorToken.id));
+        } else {
+          const token = await generateTwoFactorToken(existedUser.email);
+          if (!token) {
+            return { error: "Token not generated" };
+          }
+
+          await sendTwoFactorTokenByEmail(token[0].email, token[0].token);
+          return { twoFactor: "Two Factor Token sent! Check your email" };
+        }
       }
 
       await signIn("credentials", {

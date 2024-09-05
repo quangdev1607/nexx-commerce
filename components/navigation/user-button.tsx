@@ -55,7 +55,7 @@ export const UserButton = ({ user }: Session) => {
       {user ? (
         <>
           <DropdownMenuItem
-            onClick={() => router.push("/auth/orders")}
+            onClick={() => router.push("/dashboard/orders")}
             className="group cursor-pointer py-2 font-medium"
           >
             <TruckIcon
@@ -65,7 +65,7 @@ export const UserButton = ({ user }: Session) => {
             My orders
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push("/auth/settings")}
+            onClick={() => router.push("/dashboard/settings")}
             className="group cursor-pointer py-2 font-medium"
           >
             <Settings

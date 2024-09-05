@@ -17,10 +17,10 @@ export const RegisterSchema = z
       .min(4, { message: "Username must contain at least 4 characters" })
       .refine(
         (value) => {
-          const allowedChars = /^[a-zA-Z]+(?:[a-zA-Z]+)*$/;
+          const allowedChars = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/;
           return allowedChars.test(value);
         },
-        { message: "Username can only contain letter" },
+        { message: "Username can only contain letters and spaces" },
       ),
     email: z.string().email({ message: "Invalid email" }),
     password: z
@@ -51,3 +51,22 @@ export const ResetSchema = z.object({
     message: "Email is required",
   }),
 });
+
+export const SettingsSchema = z
+  .object({
+    name: z.optional(z.string().min(4)),
+    image: z.optional(z.string()),
+    isTwoFactorEnabled: z.optional(z.boolean()),
+    email: z.optional(z.string().email()),
+    password: z.optional(z.string().min(6)),
+    newPassword: z.optional(z.string().min(6)),
+  })
+  .refine(
+    (data) => {
+      if (data.password && !data.newPassword) {
+        return false;
+      }
+      return true;
+    },
+    { message: "New password is required", path: ["newPassword"] },
+  );
