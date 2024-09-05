@@ -1,5 +1,6 @@
 "use client";
 
+import { UploadButton } from "@/app/api/uploadthing/upload";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { Button } from "@/components/ui/button";
@@ -51,7 +52,7 @@ export const SettingsCard = (session: SettingsFormProps) => {
   });
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-
+  const [avatarUploading, setAvatarUploading] = useState(false);
   const { execute, status } = useAction(settingsAction, {
     onSuccess: (result) => {
       if (result.data?.success) setSuccess(result.data.success);
@@ -119,7 +120,43 @@ export const SettingsCard = (session: SettingsFormProps) => {
                         alt="user image"
                       />
                     )}
-                    <Button>Upload</Button>
+                    <UploadButton
+                      className="ut:button:transition-all scale-75 ut-button:bg-primary ut-button:ring-primary ut-button:duration-500 hover:ut-button:bg-primary/100 ut-allowed-content:hidden ut-label:hidden ut-label:bg-red-50"
+                      endpoint="avatarUploader"
+                      onUploadBegin={() => {
+                        setAvatarUploading(true);
+                      }}
+                      onUploadError={(error) => {
+                        form.setError("image", {
+                          type: "validate",
+                          message: error.message,
+                        });
+                        setAvatarUploading(false);
+                        return;
+                      }}
+                      onClientUploadComplete={(res) => {
+                        form.setValue("image", res[0].url!);
+                        setAvatarUploading(false);
+                        return;
+                      }}
+                      content={{
+                        button({ isUploading }) {
+                          if (isUploading) {
+                            return (
+                              <span className="font-medium text-primary-foreground">
+                                Uploading...
+                              </span>
+                            );
+                          }
+
+                          return (
+                            <span className="font-medium text-primary-foreground">
+                              Change Avatar
+                            </span>
+                          );
+                        },
+                      }}
+                    />
                   </div>
                   <FormControl>
                     <Input
@@ -195,7 +232,7 @@ export const SettingsCard = (session: SettingsFormProps) => {
 
             <FormSuccess message={success} />
             <FormError message={error} />
-            {status === "executing" ? (
+            {status === "executing" || avatarUploading ? (
               <Button
                 className="w-full max-w-[200px]"
                 disabled
