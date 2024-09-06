@@ -245,6 +245,7 @@ export const SettingsCard = (session: SettingsFormProps) => {
             ) : (
               <>
                 <Button
+                  disabled={!form.formState.isDirty}
                   type="submit"
                   className="mt-2 w-full max-w-[200px] text-base"
                 >

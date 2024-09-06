@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navigation/nav-bar";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import Toaster from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -21,6 +22,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark">
           <div className="mx-auto max-w-7xl flex-grow px-6 md:px-12">
             <Navbar />
+            <Toaster />
             {children}
           </div>
         </ThemeProvider>

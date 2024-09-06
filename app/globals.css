@@ -75,6 +75,12 @@ body {
   }
 }
 
-[data-ut-element="button"][data-state="uploading"]::after {
+[data-ut-element="button"][data-state="isUploading"]::after {
   @apply bg-primary/50;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

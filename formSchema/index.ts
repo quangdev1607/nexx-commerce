@@ -1,5 +1,5 @@
 import * as z from "zod";
-
+// ---------------------------Auth------------------------------
 export const LoginSchema = z.object({
   email: z.string().email({ message: "Invalid email" }),
   password: z
@@ -51,7 +51,7 @@ export const ResetSchema = z.object({
     message: "Email is required",
   }),
 });
-
+// ---------------------------Dashboard-----------------------------
 export const SettingsSchema = z
   .object({
     name: z.optional(z.string().min(4)),
@@ -70,3 +70,54 @@ export const SettingsSchema = z
     },
     { message: "New password is required", path: ["newPassword"] },
   );
+
+// ---------------------------Product------------------------------
+export const ProductSchema = z.object({
+  id: z.number().optional(),
+  title: z
+    .string()
+    .min(5, { message: "Title must contain at least 5 characters" }),
+  description: z
+    .string()
+    .min(5, { message: "Description must contain at least 40 characters" }),
+  price: z.coerce
+    .number({ invalid_type_error: "Price must be a number" })
+    .positive({ message: "Price can not be negative" }),
+});
+
+export type zProductSchema = z.infer<typeof ProductSchema>;
+
+export const DeleteProductSchema = z.object({
+  id: z.number(),
+});
+
+// ---------------------------Variant------------------------------
+export const VariantSchema = z.object({
+  productId: z.number(),
+  id: z.number().optional(),
+  editMode: z.boolean(),
+  productType: z
+    .string()
+    .min(3, { message: "Product type must contain at least 3 characters" }),
+  color: z.string().min(3, { message: "Not a valid color" }),
+  tags: z.array(
+    z.string().min(1, { message: "You should provide at least 1 tag" }),
+  ),
+  variantImages: z
+    .array(
+      z.object({
+        url: z.string().refine((url) => url.search("blob:") !== 0, {
+          message: "Wait for the image to upload",
+        }),
+        size: z.number(),
+        key: z.string().optional(),
+        id: z.number().optional(),
+        name: z.string(),
+      }),
+    )
+    .min(1, { message: "You should provide at least 1 image" }),
+});
+
+export const DeleteVariantSchema = z.object({
+  id: z.number(),
+});
