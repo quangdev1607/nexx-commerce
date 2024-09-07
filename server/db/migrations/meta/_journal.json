@@ -71,6 +71,13 @@
       "when": 1725588762260,
       "tag": "0009_pink_calypso",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1725680330327,
+      "tag": "0010_dapper_thena",
+      "breakpoints": true
     }
   ]
 }
