@@ -121,3 +121,16 @@ export const VariantSchema = z.object({
 export const DeleteVariantSchema = z.object({
   id: z.number(),
 });
+
+// ---------------------------Reviews------------------------------
+
+export const ReviewSchema = z.object({
+  productID: z.number(),
+  rating: z
+    .number()
+    .min(1, { message: "You should rate at least 1 star" })
+    .max(5, { message: "You can only rate 5 stars max" }),
+  comment: z
+    .string()
+    .min(3, { message: "Please add at least 3 characters for this review" }),
+});

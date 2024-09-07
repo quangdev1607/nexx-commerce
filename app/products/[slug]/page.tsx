@@ -1,8 +1,11 @@
 import { ProductPick } from "@/components/products/product-pick";
 import { ProductShowCase } from "@/components/products/product-showcase";
 import { ProductType } from "@/components/products/product-type";
+import { Reviews } from "@/components/reviews/reviews";
+import { StarsRating } from "@/components/reviews/stars-rating";
 import { Separator } from "@/components/ui/separator";
 import formatPrice from "@/lib/format-price";
+import { getReviewAverage } from "@/lib/review-average";
 import { db } from "@/server/db";
 import { productVariants } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
@@ -33,6 +36,7 @@ export default async function ProductDetailPage({
     with: {
       product: {
         with: {
+          reviews: true,
           productVariants: {
             with: {
               variantImages: true,
@@ -44,9 +48,12 @@ export default async function ProductDetailPage({
     },
   });
   if (!variant) throw new Error("Product not found");
+  const reviewAvg = getReviewAverage(
+    variant.product.reviews.map((review) => review.rating),
+  );
   return (
     <main>
-      <section className="flex flex-col gap-4 lg:flex-row lg:gap-12">
+      <section className="flex min-h-[90vh] flex-col gap-4 lg:flex-row lg:gap-12">
         <div className="flex-1">
           <ProductShowCase variants={variant.product.productVariants} />
         </div>
@@ -55,7 +62,10 @@ export default async function ProductDetailPage({
           <div>
             <ProductType variants={variant.product.productVariants} />
 
-            <span>Review stars here</span>
+            <StarsRating
+              rating={reviewAvg}
+              totalReviews={variant.product.reviews.length}
+            />
           </div>
           <Separator className="my-2" />
           <p className="py-2 text-2xl font-medium">
@@ -83,6 +93,7 @@ export default async function ProductDetailPage({
           </div>
         </div>
       </section>
+      <Reviews productID={variant.productID} />
     </main>
   );
 }
