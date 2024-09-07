@@ -5,8 +5,8 @@ import Image from "next/image";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Logo } from "./Logo";
 
+import Link from "next/link";
 import { UserButton } from "./user-button";
 
 export const Navbar = async () => {
@@ -17,7 +17,24 @@ export const Navbar = async () => {
       <nav>
         <ul className="flex items-center justify-between gap-4 md:gap-8">
           <li className="flex flex-1 list-none">
-            <Logo />
+            <Link href={"/"}>
+              <Image
+                src={"/logo/logo-darkmode.svg"}
+                alt="logo"
+                width={100}
+                height={100}
+                className="hidden dark:block"
+              />
+            </Link>
+            <Link href={"/"}>
+              <Image
+                src={"/logo/logo-light-mode.svg"}
+                alt="logo"
+                width={100}
+                height={100}
+                className="dark:hidden"
+              />
+            </Link>
           </li>
           <li className="flex list-none items-center justify-center">
             <DropdownMenu modal={false}>
@@ -45,7 +62,7 @@ export const Navbar = async () => {
                   </div>
                 )}
               </DropdownMenuTrigger>
-              <UserButton expires={session?.expires!} user={session?.user} />
+              <UserButton expires={session?.expires!} user={session?.user!} />
             </DropdownMenu>
           </li>
         </ul>

@@ -30,11 +30,11 @@ export function Products({ variants }: ProductTypes) {
     <main className="grid gap-12 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {filtered.map((variant) => (
         <Link
-          className="flex flex-col gap-2 py-2"
+          className="flex max-w-sm flex-col gap-2 py-2"
           key={variant.id}
           href={`/products/${variant.id}?id=${variant.id}&productID=${variant.productID}&price=${variant.product.price}&title=${variant.product.title}&type=${variant.productType}&image=${variant.variantImages[0].url}`}
         >
-          <div className="h-[460px] w-full max-w-[360px]">
+          <div className="h-[460px]">
             <Image
               className="h-[460px] rounded-md object-cover pb-2"
               src={variant.variantImages[0].url}

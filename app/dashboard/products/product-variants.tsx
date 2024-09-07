@@ -187,6 +187,7 @@ export const ProductVariant = forwardRef<HTMLDivElement, VariantProps>(
                     disabled={variantDeleteAction.status === "executing"}
                     type="button"
                     variant={"destructive"}
+                    className="mt-4"
                   >
                     Delete Variant
                   </Button>
