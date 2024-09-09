@@ -1,3 +1,4 @@
+import { AddToCart } from "@/components/cart/add-cart";
 import { ProductPick } from "@/components/products/product-pick";
 import { ProductShowCase } from "@/components/products/product-showcase";
 import { ProductType } from "@/components/products/product-type";
@@ -19,6 +20,7 @@ export async function generateStaticParams() {
     },
     orderBy: (productVariants, { desc }) => [desc(productVariants.id)],
   });
+
   if (data) {
     const slugID = data.map((variant) => ({ slug: variant.id.toString() }));
     return slugID;
@@ -91,6 +93,7 @@ export default async function ProductDetailPage({
               />
             ))}
           </div>
+          <AddToCart />
         </div>
       </section>
       <Reviews productID={variant.productID} />

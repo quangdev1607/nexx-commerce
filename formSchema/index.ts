@@ -134,3 +134,43 @@ export const ReviewSchema = z.object({
     .string()
     .min(3, { message: "Please add at least 3 characters for this review" }),
 });
+//ORDER
+export const CreateOrderSchema = z.object({
+  orderAddress: z.string(),
+  total: z.number(),
+  status: z.string(),
+  products: z.array(
+    z.object({
+      productID: z.number(),
+      variantID: z.number(),
+      quantity: z.number(),
+    }),
+  ),
+});
+
+// ---------------------------Payment------------------------------
+export const PaymentIntentSchema = z.object({
+  amount: z.number(),
+  currency: z.string(),
+  cart: z.array(
+    z.object({
+      quantity: z.number(),
+      productID: z.number(),
+      title: z.string(),
+      price: z.number(),
+      image: z.string(),
+    }),
+  ),
+});
+
+// ---------------------------Address------------------------------
+
+export const AddressSchema = z.object({
+  editMode: z.boolean().optional(),
+  userId: z.string(),
+  province: z.string(),
+  district: z.string(),
+  ward: z.string(),
+  address: z.string(),
+  phone: z.string().min(9).max(15),
+});

@@ -9,7 +9,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import github from "next-auth/providers/github";
 import google from "next-auth/providers/google";
-import { accounts, users } from "./db/schema";
+import { accounts, userAddress, users } from "./db/schema";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -31,6 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.email = token.email as string;
         session.user.isOAuth = token.isOAuth as boolean;
         session.user.image = token.image as string;
+        session.user.isAddress = token.isAddress as boolean;
       }
       return session;
     },
@@ -38,6 +39,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!token.sub) return token;
       const existedUser = await db.query.users.findFirst({
         where: eq(users.id, token.sub),
+        with: {
+          userAddress: true,
+        },
       });
       if (!existedUser) return token;
       const existedAccount = await db.query.accounts.findFirst({
@@ -50,6 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       token.role = existedUser.role;
       token.isTwoFactorEnabled = existedUser.twoFactorEnabled;
       token.image = existedUser.image;
+      token.isAddress = !!existedUser.userAddress?.id;
 
       return token;
     },
@@ -66,7 +71,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       authorize: async (credentials) => {
         const validatedFields = LoginSchema.safeParse(credentials);
-        console.log(validatedFields);
 
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;

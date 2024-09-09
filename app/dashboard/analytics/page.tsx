@@ -5,5 +5,5 @@ export default async function AnalyticPage() {
   const session = await auth();
 
   if (session?.user.role !== "admin") return redirect("/dashboard/settings");
-  return <h1>Hello analytics</h1>;
+  return <h1>Coming soon...</h1>;
 }

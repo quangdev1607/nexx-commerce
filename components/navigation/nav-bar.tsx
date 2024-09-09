@@ -6,11 +6,18 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
+import { db } from "@/server/db";
+import { userAddress } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 import Link from "next/link";
+import { CartDrawer } from "../cart/cart-drawer";
 import { UserButton } from "./user-button";
 
 export const Navbar = async () => {
   const session = await auth();
+  const userAddressData = await db.query.userAddress.findFirst({
+    where: eq(userAddress?.userId, session?.user.id as string),
+  });
 
   return (
     <header className="py-8">
@@ -35,6 +42,9 @@ export const Navbar = async () => {
                 className="dark:hidden"
               />
             </Link>
+          </li>
+          <li className="relative flex items-center hover:bg-muted">
+            <CartDrawer session={session!} userAddress={userAddressData} />
           </li>
           <li className="flex list-none items-center justify-center">
             <DropdownMenu modal={false}>

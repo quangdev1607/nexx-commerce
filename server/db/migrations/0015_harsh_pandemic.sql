@@ -1,0 +1,1 @@
+ALTER TABLE "user_address" ALTER COLUMN "phone" SET DATA TYPE text;
