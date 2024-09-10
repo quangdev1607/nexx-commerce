@@ -1,3 +1,4 @@
+import Algolia from "@/components/products/algolia";
 import { Products } from "@/components/products/product";
 import { db } from "@/server/db";
 
@@ -15,6 +16,7 @@ export default async function Home() {
 
   return (
     <main className="">
+      <Algolia />
       <Products variants={data} />
     </main>
   );

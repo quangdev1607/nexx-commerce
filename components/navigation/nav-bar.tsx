@@ -6,18 +6,15 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 
 import { DropdownMenu, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
-import { db } from "@/server/db";
-import { userAddress } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { getUserAddress } from "@/server/actions/get-user-address";
+
 import Link from "next/link";
 import { CartDrawer } from "../cart/cart-drawer";
 import { UserButton } from "./user-button";
 
 export const Navbar = async () => {
   const session = await auth();
-  const userAddressData = await db.query.userAddress.findFirst({
-    where: eq(userAddress?.userId, session?.user.id as string),
-  });
+  const userAddressData = await getUserAddress();
 
   return (
     <header className="py-8">
@@ -44,7 +41,11 @@ export const Navbar = async () => {
             </Link>
           </li>
           <li className="relative flex items-center hover:bg-muted">
-            <CartDrawer session={session!} userAddress={userAddressData} />
+            <CartDrawer
+              userId={userAddressData?.userId}
+              userName={userAddressData?.userName!}
+              userAddress={userAddressData?.data}
+            />
           </li>
           <li className="flex list-none items-center justify-center">
             <DropdownMenu modal={false}>

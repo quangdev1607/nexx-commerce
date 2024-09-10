@@ -19,10 +19,16 @@ export function Products({ variants }: ProductTypes) {
 
   const filtered = useMemo(() => {
     if (paramTag && variants) {
-      return variants.filter((variant) =>
-        variant.variantTags.some((tag) => tag.tag === paramTag),
-      );
+      const filterTags = variants.filter((variant) => {
+        const filterVariants = variant.variantTags.some(
+          (tag) => tag.tag === paramTag,
+        );
+        return filterVariants;
+      });
+      console.log(filterTags);
+      return filterTags;
     }
+
     return variants;
   }, [paramTag]);
 

@@ -28,7 +28,7 @@ export const PaymentConfirm = ({
   userName,
 }: {
   userAddress: UserAddress;
-  userName: string;
+  userName?: string;
 }) => {
   const { cart, setCheckoutProgress, clearCart, setCartOpen } = useCartStore();
   const totalPrice = cart.reduce((acc, item) => {

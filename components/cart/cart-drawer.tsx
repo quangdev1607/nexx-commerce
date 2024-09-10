@@ -4,7 +4,7 @@ import { useCartStore } from "@/lib/zustand-store";
 import { UserAddress } from "@/server/db/schema";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
-import { Session } from "next-auth";
+
 import {
   Drawer,
   DrawerContent,
@@ -19,11 +19,16 @@ import { CustomerInfo } from "./customer-info";
 import OrderConfirmed from "./order-confirm";
 
 type CartDrawerProp = {
-  session?: Session;
+  userId?: string;
+  userName?: string;
   userAddress?: UserAddress;
 };
 
-export const CartDrawer = ({ session, userAddress }: CartDrawerProp) => {
+export const CartDrawer = ({
+  userId,
+  userName,
+  userAddress,
+}: CartDrawerProp) => {
   const { cart, checkoutProgress, setCheckoutProgress, cartOpen, setCartOpen } =
     useCartStore();
 
@@ -54,16 +59,10 @@ export const CartDrawer = ({ session, userAddress }: CartDrawerProp) => {
         <div className="overflow-auto p-4">
           {checkoutProgress === "cart-page" && <CartItems />}
           {checkoutProgress === "customer-info" && (
-            <CustomerInfo
-              userAddress={userAddress}
-              userId={session?.user.id!}
-            />
+            <CustomerInfo userAddress={userAddress} userId={userId} />
           )}
           {checkoutProgress === "payment-page" && (
-            <PaymentConfirm
-              userName={session?.user.name!}
-              userAddress={userAddress!}
-            />
+            <PaymentConfirm userName={userName} userAddress={userAddress!} />
           )}
           {checkoutProgress === "confirmation-page" && <OrderConfirmed />}
         </div>

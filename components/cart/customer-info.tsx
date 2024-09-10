@@ -26,6 +26,7 @@ import { UserAddress } from "@/server/db/schema";
 import { motion } from "framer-motion";
 import { Session } from "next-auth";
 import { useAction } from "next-safe-action/hooks";
+import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -36,9 +37,22 @@ export const CustomerInfo = ({
   userId,
   userAddress,
 }: {
-  userId: string;
+  userId?: string;
   userAddress?: UserAddress;
 }) => {
+  const { setCartOpen } = useCartStore();
+  if (!userId) {
+    return (
+      <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
+        <span>You should login to continue</span>
+        <Button asChild>
+          <Link onClick={() => setCartOpen(false)} href={"/auth/login"}>
+            Login now
+          </Link>
+        </Button>
+      </div>
+    );
+  }
   const form = useForm<z.infer<typeof AddressSchema>>({
     resolver: zodResolver(AddressSchema),
     defaultValues: {

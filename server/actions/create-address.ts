@@ -3,6 +3,7 @@
 import { AddressSchema } from "@/formSchema";
 import { eq } from "drizzle-orm";
 import { createSafeActionClient } from "next-safe-action";
+import { revalidatePath } from "next/cache";
 import { db } from "../db";
 import { userAddress } from "../db/schema";
 
@@ -35,6 +36,7 @@ export const createUserAddress = actionClient
             })
             .where(eq(userAddress.userId, userId))
             .returning();
+          revalidatePath("/");
 
           return { success: "Updated address successfully" };
         }
@@ -50,6 +52,7 @@ export const createUserAddress = actionClient
               ward,
             })
             .returning();
+          revalidatePath("/");
 
           return { success: "Created user address" };
         }
