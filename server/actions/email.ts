@@ -9,7 +9,7 @@ const domain = getBaseURL();
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
   const { data, error } = await resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: "quang@nexx-store.site",
     to: email,
     subject: "Nexx Commerce - Confirmation email",
     html: `<p>Click to <a href='${confirmLink}'>confirm your email</a></p>`,
@@ -23,7 +23,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-password?token=${token}`;
 
   const { data, error } = await resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: "quang@nexx-store.site",
     to: email,
     subject: "Nexx Commerce - Confirmation email",
     html: `<p>Click to <a href='${confirmLink}'>reset your password</a></p>`,
@@ -38,7 +38,7 @@ export const sendTwoFactorTokenByEmail = async (
   token: string,
 ) => {
   const { data, error } = await resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: "quang@nexx-store.site",
     to: email,
     subject: "Nexx Commerce - Your 2 Factor Token",
     html: `<p>Your Confirmation Code: ${token}</p>`,
