@@ -37,7 +37,7 @@ export function Products({ variants }: ProductTypes) {
   if (filtered.length === 0)
     return (
       <main className="flex min-h-[70vh] flex-col items-center justify-center">
-        <h1 className="text-3xl font-bold">No products found</h1>
+        <h1 className="text-3xl font-bold">Products not found</h1>
         <Lottie className="h-80" animationData={notFoundCar} />
       </main>
     );
