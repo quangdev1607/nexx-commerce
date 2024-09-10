@@ -16,7 +16,7 @@ export const getVerificationTokenByEmail = async (email: string) => {
     const verificationToken = await db.query.emailTokens.findFirst({
       where: eq(emailTokens.email, email),
     });
-    console.log(verificationToken);
+
     return verificationToken;
   } catch (error) {
     console.error(error);
@@ -50,7 +50,7 @@ const getVerificationToken = async (token: string) => {
     const verificationToken = await db.query.emailTokens.findFirst({
       where: eq(emailTokens.token, token),
     });
-    console.log(verificationToken);
+
     return verificationToken;
   } catch (error) {
     console.error(error);

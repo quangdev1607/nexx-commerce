@@ -66,7 +66,7 @@ export const SettingsCard = (session: SettingsFormProps) => {
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
     setSuccess("");
     setError("");
-    console.log(values);
+
     execute(values);
   };
 

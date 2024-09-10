@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -33,7 +34,11 @@ export const LoginForm = () => {
       password: "",
     },
   });
-
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "This email is already used with different provider"
+      : "";
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showTwoFactor, setShowTwoFactor] = useState(false);
@@ -134,7 +139,7 @@ export const LoginForm = () => {
             )}
 
             <FormSuccess message={success} />
-            <FormError message={error} />
+            <FormError message={error || urlError} />
 
             {status === "executing" ? (
               <Button className="w-full" disabled type="submit" size={"lg"}>

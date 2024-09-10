@@ -13,8 +13,10 @@ import { accounts, userAddress, users } from "./db/schema";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
+  trustHost: true,
   secret: process.env.AUTH_SECRET!,
   session: { strategy: "jwt" },
+
   callbacks: {
     async session({ session, token }) {
       if (session && token.sub) {

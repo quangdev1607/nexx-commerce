@@ -1,6 +1,4 @@
-import { metadata } from "@/app/layout";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
@@ -15,9 +13,7 @@ export const ourFileRouter = {
       console.log(error);
       console.log("errorrr");
     })
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log(file);
-    }),
+    .onUploadComplete(async ({ metadata, file }) => {}),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

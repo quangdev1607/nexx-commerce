@@ -24,10 +24,10 @@ import { useCartStore } from "@/lib/zustand-store";
 import { createUserAddress } from "@/server/actions/create-address";
 import { UserAddress } from "@/server/db/schema";
 import { motion } from "framer-motion";
-import { Session } from "next-auth";
+
 import { useAction } from "next-safe-action/hooks";
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -41,18 +41,26 @@ export const CustomerInfo = ({
   userAddress?: UserAddress;
 }) => {
   const { setCartOpen } = useCartStore();
-  if (!userId) {
-    return (
-      <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
-        <span>You should login to continue</span>
-        <Button asChild>
-          <Link onClick={() => setCartOpen(false)} href={"/auth/login"}>
-            Login now
-          </Link>
-        </Button>
-      </div>
+
+  const { data: provincesData, isLoading, error } = useProvinces();
+  const [provinceId, setProvinceId] = useState("");
+  const [districtId, setDistrictId] = useState("");
+  const { setCheckoutProgress } = useCartStore();
+  const {
+    data: districtsData,
+    isLoading: districtLoading,
+    error: districtError,
+  } = useDistricts(provinceId);
+  const {
+    data: wardsData,
+    isLoading: wardLoading,
+    error: wardError,
+  } = useWards(districtId);
+
+  if (error || districtError || wardError)
+    throw new Error(
+      error?.message || districtError?.message || wardError?.message,
     );
-  }
   const form = useForm<z.infer<typeof AddressSchema>>({
     resolver: zodResolver(AddressSchema),
     defaultValues: {
@@ -75,26 +83,6 @@ export const CustomerInfo = ({
   useEffect(() => {
     setEditMode();
   }, [userAddress]);
-  const { data: provincesData, isLoading, error } = useProvinces();
-  const [provinceId, setProvinceId] = useState("");
-  const [districtId, setDistrictId] = useState("");
-  const { setCheckoutProgress } = useCartStore();
-
-  const {
-    data: districtsData,
-    isLoading: districtLoading,
-    error: districtError,
-  } = useDistricts(provinceId);
-  const {
-    data: wardsData,
-    isLoading: wardLoading,
-    error: wardError,
-  } = useWards(districtId);
-
-  if (error || districtError || wardError)
-    throw new Error(
-      error?.message || districtError?.message || wardError?.message,
-    );
 
   const { execute, status } = useAction(createUserAddress, {
     onSuccess(result) {
@@ -112,6 +100,19 @@ export const CustomerInfo = ({
   const onSubmit = (values: z.infer<typeof AddressSchema>) => {
     execute(values);
   };
+
+  if (!userId) {
+    return (
+      <div className="mx-auto flex max-w-2xl flex-col items-center justify-center gap-4">
+        <span>You should login to continue</span>
+        <Button asChild>
+          <Link onClick={() => setCartOpen(false)} href={"/auth/login"}>
+            Login now
+          </Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <motion.div className="mx-auto flex max-w-2xl">
