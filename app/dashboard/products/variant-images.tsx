@@ -104,6 +104,7 @@ export const VariantImages = () => {
             </TableRow>
           </TableHeader>
           <Reorder.Group
+            className="cursor-grab"
             as="tbody"
             values={fields}
             onReorder={(e) => {
