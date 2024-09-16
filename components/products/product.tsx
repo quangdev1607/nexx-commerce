@@ -27,7 +27,7 @@ export function Products({ variants }: ProductTypes) {
         );
         return filterVariants;
       });
-      console.log(filterTags);
+
       return filterTags;
     }
 
