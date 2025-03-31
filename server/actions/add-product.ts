@@ -1,6 +1,5 @@
 "use server";
 import { ProductSchema } from "@/formSchema";
-import algoliasearch from "algoliasearch";
 import { eq } from "drizzle-orm";
 import { createSafeActionClient } from "next-safe-action";
 import { revalidatePath } from "next/cache";

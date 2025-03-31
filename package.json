@@ -12,7 +12,6 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@algolia/autocomplete-js": "^1.17.4",
     "@auth/drizzle-adapter": "^1.4.2",
     "@hookform/resolvers": "^3.9.0",
     "@paralleldrive/cuid2": "^2.2.2",
@@ -38,7 +37,6 @@
     "@tiptap/starter-kit": "^2.6.6",
     "@types/bcrypt": "^5.0.2",
     "@uploadthing/react": "^6.8.0",
-    "algoliasearch": "^4.24.0",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
